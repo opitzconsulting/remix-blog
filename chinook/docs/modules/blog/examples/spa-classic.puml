@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Component(spa, "SPA", "React / Angular / Vue", "JavaScript Client application running in a web browser")
+Component(backend, "Backend", "Spring Boot", "Java backend application")
+ComponentDb(database, "Database", "PostgreSQL", "Relational database")
+
+Rel(spa, backend, "HTTP", "JSON")
+Rel(backend, database, "JDBC", "SQL")
+
+
+@enduml

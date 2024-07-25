@@ -1,0 +1,5 @@
+.Deutsch
+** xref:part1.de.adoc[Remix für Geschäftsanwendungen]
+** xref:part2.de.adoc[List, Create, Update, Delete]
+
+.Englisch

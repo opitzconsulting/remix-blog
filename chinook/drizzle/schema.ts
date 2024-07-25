@@ -162,8 +162,25 @@ export const album_viewInChinook = chinook.table("album_view", {
 	number_of_tracks: bigint("number_of_tracks", { mode: "number" }),
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 	length_milliseconds: bigint("length_milliseconds", { mode: "number" }),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	length_seconds: bigint("length_seconds", { mode: "number" }),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	length_minutes: bigint("length_minutes", { mode: "number" }),
 	artist_id: integer("artist_id"),
 	album_id: integer("album_id"),
+});
+
+export const invoice_viewInChinook = chinook.table("invoice_view", {
+	invoice_id: integer("invoice_id"),
+	invoice_date: timestamp("invoice_date", { mode: 'string' }),
+	customer_name: text("customer_name"),
+	customer_id: integer("customer_id"),
+	total: numeric("total", { precision: 10, scale:  2 }),
+	billing_address: varchar("billing_address", { length: 70 }),
+	billing_postal_code: varchar("billing_postal_code", { length: 10 }),
+	billing_city: varchar("billing_city", { length: 40 }),
+	billing_state: varchar("billing_state", { length: 40 }),
+	billing_country: varchar("billing_country", { length: 40 }),
 });
 
 export const customer_viewInChinook = chinook.table("customer_view", {
@@ -194,19 +211,6 @@ export const sales_agent_viewInChinook = chinook.table("sales_agent_view", {
 	employee_id: integer("employee_id"),
 });
 
-export const invoice_viewInChinook = chinook.table("invoice_view", {
-	invoice_id: integer("invoice_id"),
-	invoice_date: timestamp("invoice_date", { mode: 'string' }),
-	customer_name: text("customer_name"),
-	customer_id: integer("customer_id"),
-	total: numeric("total", { precision: 10, scale:  2 }),
-	billing_address: varchar("billing_address", { length: 70 }),
-	billing_postal_code: varchar("billing_postal_code", { length: 10 }),
-	billing_city: varchar("billing_city", { length: 40 }),
-	billing_state: varchar("billing_state", { length: 40 }),
-	billing_country: varchar("billing_country", { length: 40 }),
-});
-
 export const playlist_trackInChinook = chinook.table("playlist_track", {
 	playlist_id: integer("playlist_id").notNull().references(() => playlistInChinook.playlist_id),
 	track_id: integer("track_id").notNull().references(() => trackInChinook.track_id),
@@ -216,5 +220,18 @@ export const playlist_trackInChinook = chinook.table("playlist_track", {
 		playlist_id_idx: index("playlist_track_playlist_id_idx").using("btree", table.playlist_id),
 		track_id_idx: index("playlist_track_track_id_idx").using("btree", table.track_id),
 		playlist_track_pkey: primaryKey({ columns: [table.playlist_id, table.track_id], name: "playlist_track_pkey"}),
+	}
+});
+
+export const missing_translationsInChinook = chinook.table("missing_translations", {
+	language: text("language").notNull(),
+	namespace: text("namespace").notNull(),
+	key: text("key").notNull(),
+	default_value: text("default_value"),
+	reported_at: timestamp("reported_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+},
+(table) => {
+	return {
+		missing_translations_pkey: primaryKey({ columns: [table.language, table.namespace, table.key], name: "missing_translations_pkey"}),
 	}
 });

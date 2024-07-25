@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+SET_SKETCH_STYLE($bgColor="white", $footerWarning="Sketch", $footerText="")
+LAYOUT_AS_SKETCH()
+
+Boundary(spa, "SPA", "React / Angular / Vue") {
+    Component(ui, "UI Components", "React / Angular / Vue", "Implements UI logic and client side validation")
+    Component(client, "Rest Client", "Axios / Fetch / custom code", "Implements network communication, data transformation and state management")
+    Rel(ui, client, "uses")
+}
+
+Boundary(backend, "Backend", "Spring Boot") {
+    Component(mvc, "Rest API", "Spring MVC / custom mapping defiition", "Converts between JSON and Java objects")
+    Component(services, "Services", "Spring Services", "Server side validation \n and business logic")
+    Component(jpa, "JPA", "Java Persistence API / custom mapping definition", "Converts between SQL and Java objects")
+    Rel(mvc, services, "uses")
+    Rel(services, jpa, "uses")
+}
+
+Rel_R(client, mvc, "HTTP", "JSON / GraphQL / gRPC")
+
+@enduml

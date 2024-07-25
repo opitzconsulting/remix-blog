@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Remix eine Alternative für Geschäftsanwendungen :: Remix-blog</title>
+    <meta name="generator" content="Antora 3.1.9">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../../..">Remix-blog</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+<!--
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+-->
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="remix-blog" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Remix Blog</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Introduction</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deutsch</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="part1.de.html">Remix</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Remix Blog</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Remix Blog</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Remix Blog</a></li>
+    <li>Deutsch</li>
+    <li><a href="part1.de.html">Remix</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///Users/rat/devel/git/remix-blog/chinook/docs/modules/blog/pages/part1.de.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Remix eine Alternative für Geschäftsanwendungen</h1>
+<div class="paragraph">
+<p>In diesem Blog will ich dir Remix als eine Alternative zur Entwicklung von Geschäftsanwendungen vorstellen.
+Vor 10-15 Jahren noch war es üblich Geschäftsanwendungen mittels Server-seitigem Rendering zu entwickeln.
+Das war die Zeit der klassischen Frameworks, wie PHP, Ruby on Rails, ASP.NET oder Java Server Faces.
+Die Anwendungen wurden auf dem Server gerendert und als HTML an den Browser ausgeliefert.
+Allerdings scheuten viele Entwickler die Komplexität von JavaScript und die damit verbundenen Probleme.
+Die Browser waren damals noch nicht so standardisiert und performant wie heute.
+Wobei man auch heute noch streiten kann, ob die Browser wirklich standardisiert sind.
+Aber damals war es noch schlimmer.</p>
+</div>
+<div class="paragraph">
+<p>Allerdings hatten diese Anwendungen gegenüber klassischen Desktop Anwendungen, die sie ablösen sollten, einen entscheidenden Nachteil.
+Sie waren nicht so responsiv und interaktiv, wie klassische Desktop Anwendungen.
+Das lag daran, dass die Anwendungen immer wieder den Server kontaktieren mussten, um Daten zu laden oder zu speichern.</p>
+</div>
+<div class="paragraph">
+<p>Mit der Einführung von AJAX und später Single Page Applications (SPA) hat sich das geändert.
+Die Anwendungen wurden interaktiver und responsiver.
+Die Welt drehte sich komplett in Richtung Single Page Applications.</p>
+</div>
+<div class="paragraph">
+<p>Die Kommunikation mit dem Server erfolgte über HTTP APIs, die Daten im JSON Format austauschten.
+Die Anwendungen wurden im Browser gerendert und die Daten über APIs geladen.
+Dies führte zu einem Push des REST Paradigmas.</p>
+</div>
+<div class="imageblock kroki">
+<div class="content">
+<img src="_images/spa-classic-a5a8f0419faddb0d2119c95f1ecea3824d85981e.svg" alt="Klassische SPA Architektur">
+</div>
+<div class="title">Figure 1. Klassische SPA Architektur</div>
+</div>
+<div class="paragraph">
+<p>Und aus meiner Sicht führte das zu ein paar Problemen, die erstmal nicht so offensichtlich waren, da alle auf den Zug aufgesprungen sind und es so gemacht haben.
+Es waren auch alle damit beschäftigt, erst einmal die neuen Technologien zu lernen und zu verstehen.
+Es kamen immer mehr SPA Frameworks auf: Angular 1, Angular, React, Vue.js, Svelte, Preact, ember, um nur ein paar zu nennen.
+Außerdem kam neben JavaScript auch TypeScript auf, das die Sprache JavaScript um Typen erweiterte.
+Und das Tooling drumherum war massiv in Bewegung: Webpack, Rollup, Babel, ESLint, Prettier, Jest, Cypress, Storybook, um nur ein paar zu nennen.</p>
+</div>
+<div class="paragraph">
+<p>Bevor wir uns dem Problem der Netzwerkkommunikation zuwenden, noch einen kleinen Blick in die einzelnen Komponentn .Whitebox SPA</p>
+</div>
+<div class="imageblock kroki">
+<div class="content">
+<img src="_images/spa-classic-whitebox-08f8d1ca38a8995bfd49e11d6a7f6ead5103d429.svg" alt="spa-classic-whitebox">
+</div>
+</div>
+<div class="paragraph">
+<p>Hier sieht man, was häufig passiert, wenn man Daten aus der Datenbank ins UI laden will.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Definition von JPA Entites und <strong>Mapping</strong> zwischen SQL und Java Objekten</p>
+</li>
+<li>
+<p>Mapping zwischen Java Objekten und JSON</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Wir haben hier unter Umständen zwei Mappings drin, die wir pflegen müssen.
+Das ist nicht nur fehleranfällig, sondern auch zeitaufwändig.
+Für bestimmte Use Cases helfen hier Ansätze, wie Spring Data REST weiter, welche zum Teil das Mapping automatisieren, zumindest Richtung REST.
+Dies führt dann wieder zu einem Code First Ansatz für REST Schnittstellen.
+Dies kann in Ordnung sein, wenn es sich um "private" Schnittstellen handelt.
+Leider ist die Trennung zwischen "privaten (BFF)" und öffentlichen Business API Schnittstellen nicht immer so klar.
+Dies führt schnell dazu, dass wir eine "Business API" vorsehen, aber bei einer spezifischen BFF Schnittstelle landen, die eigentlich privat sein sollte.
+Ferner sehen wir, dass wir Validierungslogik häufig doppelt implementieren.
+Hier können generierende Ansätze helfen, die aus Java Klassen (Annotationen) entsprechende zod Schemata generieren.
+Mein Kollege ist darauf in seinem Post <a href="https://thecattlecrew.net/2024/07/08/validieren-mit-zod-zwischen-frontend-und-backend/">Validieren mit Zod: zwischen Frontend und Backend</a> eingegangen.</p>
+</div>
+<div class="paragraph">
+<p>Aber so langsam wurden auch einige Probleme sichtbar bei der Benutzung von REST.
+Es ist nicht so einfach bei einem REST Architekturstil die Daten so zu laden, wie das Frontend sie für einen bestimmten Use Case benötigt.
+Es gibt Overfetching und Underfetching, also es werden zu viele oder zu wenige Daten vom Backend geladen.
+Das Overfetching hat zur Folge, dass die Latenzzeit und gerade auch im mobilen Bereich die Datenmenge, die übertragen werden muss, steigt.
+Underfetching hat zur Folge, dass mehrere Requests gemacht werden müssen, um die Daten zu laden, die für einen Use Case benötigt werden.
+Dies erhöht die Latenzzeit und die Komplexität der Anwendung.
+Gleichzeitig muss das Frontend wissen, welche Endpunkte es ansprechen muss, um die Daten zu laden.
+Mit der Einführung von Microservices, ist dies häufig nicht mehr so einfach, da die Daten auf verschiedene Services verteilt sind.</p>
+</div>
+<div class="paragraph">
+<p>Um das Problem zu lösen, gibt es verschiedene Lösungen.
+Zum einen wurde je Frontend ein spezielles Backend entwickelt, welches die Daten so liefert, wie das Frontend sie benötigt.
+Diese Lösung ist als <a href="https://bff-patterns.com">"Backend for Frontend"</a> bekannt.</p>
+</div>
+<div class="paragraph">
+<p>Eine andere Lösung ist die Einführung von GraphQL oder Falcor.
+Diese Technologien erlauben es dem Frontend, die Daten zu laden, die es benötigt.
+Hier hat sich klar GraphQL durchgesetzt.
+Der GraphQL Server fungiert dabei häufig als Gateway zu den Microservices.
+Das Frontend braucht nur noch den GraphQL Server ansprechen und bekommt die Daten, die es benötigt.</p>
+</div>
+<div class="paragraph">
+<p>Wer ein Frontend auf mehrere Backend Microservices aufsetzen muss, ist immer noch mit dieser Technologie oder anderen Technologien, die das gleiche Problem lösen, gut beraten, wie etwa tRPC.</p>
+</div>
+<div class="paragraph">
+<p>Allerdings wird diese Komplexität für viele Geschäftsanwendungen mit einer überschaubaren Nutzerbasis gar nicht benötigt.
+Man würde gerne die Vorteile von Single Page Applications nutzen, aber nicht die Komplexität, die damit einhergeht.
+Die Entwicklung solcher Anwendungen scheint damit zu teuer und zu komplex zu werden.</p>
+</div>
+<div class="paragraph">
+<p>Vielleicht ist dies auch eine der Motivatoren für den Trend zu No-Code und Low-Code Plattformen.
+Sie versprechen die Entwicklung solcher Anwendungen drastisch zu vereinfachen zu beschleunigen.
+Aus meiner Sicht aber geht das auf Kosten der Flexibilität und der Kontrolle über die Anwendungen.
+Es kommt zu einem starken Vendor Lock in.
+Irgendwie erinnert mich das an die 90er Jahre und das Aufkommen von 4GL Sprachen.
+Der Wechsel zu einer anderen Technologie kann schwierig und kostspielig werden.
+Low-Code Plattformen sind sehr "opinionated" in der Art und Weise, wie Software entwickelt wird.
+Sie bieten vorgefertigte Bausteine und Prozesse, welche die Entwicklung beschleunigen können, bei spezifischen Anforderungen aber an Grenzen stoßen können.
+Häufig sind sie aus meiner Sicht ebenfalls ein Rückschritt in der Softwareentwicklung.
+Wenige unterstützen sauberes Unit Testing und die Integration in CI/CD Pipelines.
+Ebenfalls stellen wir immer wieder fest, dass die Entwicklungskosten gesenkt werden, aber die Gesamtkosten aufgrund von Lizenzkosten und Abo-Gebühren steigen.
+Gerade, wenn dann die Nutzeranzahl steigt, kann es schnell teuer werden.
+Aufgrund der hohen Abhängigkeit von den Plattformen, kann es auch schwierig werden, die Anwendung zu skalieren oder zu migrieren.
+Gleichzeitig benötigt man für die Entwicklung dieser Anwendungen auch noch Entwickler, die sich mit der Plattform auskennen.
+Die Plattformen sind also nicht so einfach zu bedienen, wie es auf den ersten Blick scheint.</p>
+</div>
+<div class="paragraph">
+<p>Wenn aber an den Verkaufsargumenten für Low Code Plattformen etwas dran ist: Entwicklungsgeschwindigkeit und Entwicklungskosten zu senken, wir aber gleichzeitig keine Kompromisse bei Standard-Technologien und einem relativ un-opinionated Ansatz machen wollen, was gibt es für Alternativen?</p>
+</div>
+<div class="paragraph">
+<p>Hier kommt Remix ins Spiel.
+Remix ist ein sogenanntes Fullstack Framework, welches auf React und React-Router aufsetzt.
+<a href="https://nextjs.org">Next.js</a> ist der Platzhirsch im React Umfeld, aber auch für die anderen SPA Frameworks gibt es Fullstack Frameworks, wie <a href="https://nuxt.com">Nuxt.js</a> für Vue.js oder <a href="https://kit.svelte.dev">SvelteKit</a> für Svelte.
+Nur für Angular ist das Angebot dünn.
+Es gibt mit <a href="https://analogjs.org">Analog</a> ein Fullstack Framework, welches auf Angular aufsetzt, aber es ist noch nicht so ausgereift wie die anderen Frameworks.</p>
+</div>
+<div class="paragraph">
+<p>Viele der Fullstack Frameworks motivieren sich über den Aspekt der Search-Engine-Optimierung (SEO).
+Da HTML Seiten auf dem Server gerendert werden, sind diese Anwendungen für Suchmaschinen unter Umständen besser geeignet.
+Dies ist sicherlich wichtig für Anwendungen, die öffentlich zugänglich sind und von Suchmaschinen indexiert werden sollen.
+Für interne Anwendungen ist der SEO Aspekt weniger interessant.</p>
+</div>
+<div class="paragraph">
+<p>Der generelle Aufbau sieht wie folgt aus</p>
+</div>
+<div class="imageblock kroki">
+<div class="content">
+<img src="_images/remix-whitebox-5d8fbfdcea4df2ef0b26e834b821a344ec5cd960.svg" alt="Whitebox Remix">
+</div>
+<div class="title">Figure 2. Whitebox Remix</div>
+</div>
+<div class="paragraph">
+<p>Im Gegensatz zum ersten Ansatz mit dem Ökosystem-Bruch (JavScript / Java), haben wir hier einen durchgängigen Ansatz.
+Wir brauchen keine unnötigen Mappings definieren, da wir direkt JSON aus der Datenbank bekommen.
+Außerdem definieren wir einmal die Validierungslogik für die Daten und können diese sowohl im Frontend als auch im Backend nutzen.
+Remix sorgt als Aufsatz auf "React Router" dafür, dass folgende vier Dinge bereitgestellt werden:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ein Compiler</p>
+</li>
+<li>
+<p>ein HTTP Handler (Runtime Server Adapter)</p>
+</li>
+<li>
+<p>ein Server Framework</p>
+</li>
+<li>
+<p>ein Browser Framework</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Eine detaillerte Beschreibung findet sich in der <a href="https://remix.run/docs/en/main/discussion/introduction">Remix Dokumentation</a>.
+Einer der wesentlichen Unterschiede zu der Entwicklung mit einer REST API, wie Spring MVC ist, dass Remix
+UI zentrisch ist.
+Während bei der Implementierung einer REST API man einen Controller implementiert, der mehrere URLS für ein einzelnes Modell bereitstellt, ist bei Remix immer eine Datei für Laden, Manipulation und Layout zuständig.
+Dabei kann eine Route auf ein Segment einer URL mappen.
+Remix aggregiert die Daten und Komponenten, um dann die komplette UI auszuliefern.</p>
+</div>
+<div class="paragraph">
+<p>Mit diesem Ansatz erfüllt einige der Anforderungen, die wir an eine Geschäftsanwendung haben:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Serverseitiger Zugriff auf Datenbanken</p>
+</li>
+<li>
+<p>Authentifizierung und Autorisierung</p>
+</li>
+<li>
+<p>Testbarkeit</p>
+</li>
+<li>
+<p>Integration von Front- und Backend, ohne dass wir uns um die Details kümmern müssen</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Einiges davon wird schon durch das Node.js Ökosystem abgedeckt.
+Aber gerade der letzte Punkt ist die Domäne der Fullstack Frameworks.
+Dies wird als Hydration und Dehydration bezeichnet.</p>
+</div>
+<div class="paragraph">
+<p>Für Geschäftsanwendungen ebenfalls häufig wichtig sind aus meiner Sicht zwei Dinge:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Mächtige Tabellen</p>
+</li>
+<li>
+<p>Formulare und Validierung</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Dies wird nicht von Remix bereitgestellt.</p>
+</div>
+<div class="paragraph">
+<p>Für Tabellen setzen wir auf Mantine-React-Tables bzw.
+Material-React-Tables.
+Diese Komponenten setzen wiederum auf der (headless) Tanstack Table auf.
+Neben der (kommerziellen) <a href="https://www.ag-grid.com">ag-grid</a> Komponente ist das sicherlich eine der mächtigsten Tabellenkomponenten im React Umfeld.</p>
+</div>
+<div class="paragraph">
+<p>Für Formulare und Validierung setzen wir auf remix-hook-form, eine kleine Erweiterung von react-hook-form.</p>
+</div>
+<div class="paragraph">
+<p>Stellt sich aber immer noch die Frage, warum wir Remix statt Next.js einsetzen.
+Letzteres ist doch der Platzhirsch im React Umfeld.
+Bei prisimic gibt es einen <a href="https://prismic.io/blog/compare-remix-vs-nextjs#should-you-use-remix-or-next">Blogpost</a>, der die beiden Frameworks vergleicht.</p>
+</div>
+<div class="paragraph">
+<p>Ausschlaggebend war für uns:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Setzt auf React Router auf (d.h. wir können Wissen wiederverwenden, etwa auch für klassische React Projekte)</p>
+</li>
+<li>
+<p>Nutzung an Web Standards (Flexiblität für unterschiedliche Einsatzszenarien)</p>
+</li>
+<li>
+<p>Keine ("unnötigen") Extra-Features</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Insgesamt bietet Remix genau das, was wir brauchen, um eine Fullstack React Anwendung zu bauen ohne weiteren Overhead.
+D.h. die Lernkurve ist relativ flach und man ist schnell produktiv.</p>
+</div>
+<div class="paragraph">
+<p>Zum Punkt "unnötigte" Extra Features. Das ist natürlich immer eine Frage des Standpunkts.
+Aber einiges, was Next.JS anbietet, wie Static Site Generate oder Incremental Static Regeneration ist für Geschäftsanwendungen weniger wichtig, denn es ist eher fragwürdig Daten zu cachen, die ein Nutzer ändern kann.
+HTTP caching ist für öffentliche Daten, welche durch Back-Office Prozesse aktualisiert werden.
+Da sind wir ganz bei Ryan Florence <a href="https://github.com/remix-run/remix/discussions/1228">Standpunkt</a>, einem der Köpfe hinter Remix.
+Hier empfehle ich <a href="https://youtu.be/bfLFHp7Sbkg?si=T6ROk_sOkch_J8We">CDN Caching, SSG, and SSR</a> von ihm.
+Und was er erzählt ist nicht nur relevant für CDN Caching, sondern für jede Art von Reverse Proxy vor dem eigentlichen Server, d.h. auch wenn wir etwa einen Caddy Server oder einen Nginx Server vor unserem Node.js Server haben.</p>
+</div>
+<div class="paragraph">
+<p>Das wäre es für diesen Post.
+In den folgenden Posts schauen wir uns an, wie sich Remix anfühlt.</p>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/vendor/lunr.js"></script>
+<script src="../../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../../.." data-snippet-length="100" data-stylesheet="../../../_/css/search.css"></script>
+<script async src="../../../search-index.js"></script>
+  </body>
+</html>

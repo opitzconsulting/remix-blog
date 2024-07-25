@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+!include <C4/C4_Context>
+
+SET_SKETCH_STYLE($bgColor="white", $footerWarning="Sketch", $footerText="")
+LAYOUT_AS_SKETCH()
+
+System_Boundary(app, "Business Application") {
+    Container(remix, "Business UI", "Remix")
+    Container(spring, "Complex Backend and Integration Logic", "Spring Boot")
+    ContainerDb(database,"Database", "PostgreSQL")
+    Rel(remix, spring, "REST")
+    Rel(remix, database, "SQL")
+    Rel(spring, database, "SQL")
+}
+
+System_Ext(externalA, "External System A")
+System_Ext(externalB, "External System B")
+
+Rel(spring,externalA, "any protocol")
+Rel(externalB,spring, "REST/Kafka/NATS")
+
+@enduml

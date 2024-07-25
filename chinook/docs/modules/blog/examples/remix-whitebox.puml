@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+SET_SKETCH_STYLE($bgColor="white", $footerWarning="Sketch", $footerText="")
+LAYOUT_AS_SKETCH()
+
+Boundary(spa, "SPA", "React / Angular / Vue") {
+    Component(ui, "UI Components", "React", "Implements UI logic and client side validation")
+    Component(remix_client, "Remix Client", "", "Implements routing, network communication and hydration")
+    Rel(ui, remix_client, "uses")
+}
+
+Boundary(shared_code, "Shared Code", "TypeScript") {
+    Component(ui_component, "UI Component", "React / Angular / Vue", "Implements UI logic and client side validation")
+    Component(data_validation, "Data Validation", "Zod", "Implements data validation")
+}
+
+Boundary(backend, "Backend", "Spring Boot") {
+    Component(remix_server, "Remix Server", "Remix", "Routing, hydration, and runtime adapter")
+    Component(remix_route, "Remix Route", "Remix", "Data fetching, manipulation, data binding, and server side validation")
+    Component(orm, "ORM", "Prisma / Drizzle / ...", "Database access and data manipulation")
+    Rel(remix_server, remix_route, "uses")
+    Rel(remix_route, orm, "uses")
+}
+
+Rel(remix_client, remix_server, "HTTP")
+
+Rel_R(remix_route, shared_code, "uses")
+Rel(spa, shared_code, "uses")
+
+
+
+@enduml

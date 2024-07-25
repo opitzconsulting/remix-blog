@@ -1,6 +1,6 @@
-import {List} from "@mantine/core";
-import type {MetaFunction} from "@remix-run/node";
-import {Link} from "@remix-run/react";
+import { List } from "@mantine/core";
+import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -14,8 +14,11 @@ export default function Index() {
 		<div className="font-sans p-4">
 			<h1 className="text-3xl">Welcome to Remix</h1>
 			<List>
-				<List.Item><Link to={'/customers'} prefetch={'intent'}>Customers</Link> </List.Item>
-				<List.Item><Link to={'/albums'} prefetch={"intent"}>Albums</Link></List.Item>
+				<List.Item>
+					<Link to={"/albums"} prefetch={"intent"}>
+						Albums
+					</Link>
+				</List.Item>
 				<List.Item>Remix Docs</List.Item>
 			</List>
 		</div>

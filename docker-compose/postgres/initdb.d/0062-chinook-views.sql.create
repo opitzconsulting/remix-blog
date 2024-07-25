@@ -32,9 +32,11 @@ DROP VIEW IF EXISTS album_view;
 CREATE OR REPLACE VIEW album_view AS
 (
 SELECT album.title,
-       artist.name             AS artist,
-       count(track.track_id)   AS number_of_tracks,
-       sum(track.milliseconds) AS length_milliseconds,
+       artist.name                         AS artist,
+       count(track.track_id)               AS number_of_tracks,
+       sum(track.milliseconds)             AS length_milliseconds,
+       sum(track.milliseconds) / 1000      AS length_seconds,
+       sum(track.milliseconds) / 1000 / 60 AS length_minutes,
        artist.artist_id,
        album.album_id
 FROM album
@@ -51,7 +53,7 @@ CREATE OR REPLACE VIEW invoice_view AS
 SELECT invoice.invoice_id,
        invoice.invoice_date,
        customer.first_name || ' ' || customer.last_name AS customer_name,
-       customer.customer_id as customer_id,
+       customer.customer_id                             AS customer_id,
        invoice.total                                    AS total,
        billing_address,
        billing_postal_code,

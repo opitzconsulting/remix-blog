@@ -1,0 +1,7 @@
+name: remix-blog
+title: Remix Blog
+start_page: ROOT:index.adoc
+version: 0.1
+nav:
+  - modules/ROOT/nav.adoc
+  - modules/blog/nav.adoc

@@ -1,0 +1,85 @@
+= README
+
+:github: https://github.com/opitzconsulting/remix-blog
+:blog: https://thecattlecrew.net
+
+This repository contains the source code for the blog post {blog}["Remix—Ein leichtgewichtiger Ansatz für Geschäftsanwendungen"].
+
+== Prerequisites
+
+* Docker
+* Node.js (>= 20)
+* yarn
+
+== Getting Started development
+
+After cloning the project, start the postgres container using docker in the root directory of the project.
+
+[source, bash]
+----
+docker compose up -d
+----
+
+Then install the dependencies and start the application (in the chinook subdirectory)
+
+[source, bash]
+----
+yarn install
+yarn dev
+----
+
+The application is now available at http://localhost:5173.
+
+== Show me the app
+
+If you only want to see the app, you can use the following command to start the app in a docker container.
+
+[source, bash]
+----
+docker compose --profile up -d
+----
+
+The application is available at http://localhost:8080
+
+== Running the tests
+
+Currently, this demo project does not contain many tests.
+However, it has the test infrastructure in place for unit, integration, and end-to-end tests.
+
+It uses https://vitest.dev[vitest] for running the tests, the https://testing-library.com[testing-library] for the integration tests, and https://playwright.dev[playwright] for the end-to-end tests.
+It also makes use of https://remix.run/docs/en/main/other-api/testing[Remix's testing utilities].
+
+To run the unit tests, execute the following command:
+[source, bash]
+----
+yarn test
+----
+
+To run the End-2-End tests, execute the following command:
+[source, bash]
+----
+yarn test:e2e
+----
+
+== Regenerate the documentation
+
+The documentation is generated using https://antora.org[Antora].
+Because of the diagram generation, you need kroki running on your machine.
+We wanted to showcase a local installation of kroki, so we did not use the hosted version.
+Often documentation should not leave the company network, so this is a good approach.
+For this public repository, we could have used the hosted version.
+
+Therefore, you need to start kroki in the root directory of the project.
+[source, bash]
+----
+docker compose --profile doc up -d
+----
+
+Then you can generate the documentation using the following command in the docs directory.
+[source, bash]
+----
+yarn install
+yarn antora:generate
+----
+
+If you start the application, the documentation is available at http://localhost:5173/docs.

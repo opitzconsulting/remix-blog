@@ -1,0 +1,6 @@
+= Remix Demo Project
+
+This project serves a demo of the Remix framework and some other tools.
+The showcase is a classical web application based on the Chinook sample database.
+
+It is also used as a code base for the Remix Blog Posts series.

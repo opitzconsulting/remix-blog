@@ -14,13 +14,30 @@ services:
       - "./docker-compose/postgres/initdb.d:/docker-entrypoint-initdb.d:Z"
       - postgres-data:/var/lib/postgresql/data
   chinook:
-    build:
-      context: ./core/ui
-      dockerfile: ./Dockerfile
     profiles:
       - app
+    build:
+      context: ./chinook
+      dockerfile: ./Dockerfile
     environment:
       DATABASE_URL: ${DATABASE_URL}
     ports:
       - "3000:3000"
     network_mode: host
+  kroki:
+    profiles:
+      - doc
+    image: yuzutech/kroki:0.25.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mermaid
+    environment:
+      - KROKI_MERMAID_HOST=mermaid
+      - KROKI_SAFE_MODE=UNSAFE
+  mermaid:
+    profiles:
+      - doc
+    image: yuzutech/kroki-mermaid:0.24.1
+    expose:
+      - "8002"

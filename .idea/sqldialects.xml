@@ -2,6 +2,5 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/docker-compose/postgres/initdb.d/0061-chinook-sequences.sql.update" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/docker-compose/postgres/initdb.d/0062-chinook-views.sql.create" dialect="PostgreSQL" />
   </component>
 </project>

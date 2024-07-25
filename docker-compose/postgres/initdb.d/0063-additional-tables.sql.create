@@ -1,0 +1,12 @@
+-- Add missing_translations table for i18next
+CREATE TABLE chinook.missing_translations
+(
+    language      TEXT NOT NULL,
+    namespace     TEXT NOT NULL,
+    key           TEXT NOT NULL,
+    default_value TEXT,
+    reported_at   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    CONSTRAINT missing_translations_pkey PRIMARY KEY (language, namespace, key)
+);
+ALTER TABLE chinook.missing_translations
+    OWNER TO chinook_admin;

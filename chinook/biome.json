@@ -1,5 +1,18 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"vcs": {
+		"clientKind": "git",
+		"enabled": true,
+		"defaultBranch": "origin/main"
+	},
+	"files": {
+		"ignore": [
+			"chinook/drizzle",
+			"chinook/app/entry.*.tsx",
+			"chinook/coverage/**",
+			"chinook/public/docs"
+		]
+	},
 	"organizeImports": {
 		"enabled": true
 	},

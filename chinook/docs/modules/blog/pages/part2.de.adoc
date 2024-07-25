@@ -1,0 +1,240 @@
+= Remix: Routes und Data Loading
+
+Nachdem wir den Vorteil von Typescript Fullstack Frameworks wie Remix schon in Teil 1 betrachtet haben, wollen wir heute damit anfangen, Remix in Action zu sehen.
+
+Remix lässt sich auf unterschiedliche Arten deployen.
+Es hat keine feste Bindung etwa an Node.JS.
+Alles, was es braucht, ist ein kleiner Adapter.
+Die gibt es als offizielle Varianten vom Remix Team oder auch von der Community.
+
+Wer Remix selbst betreibt, wird wahrscheinlich Node.JS, Deno oder Express verwenden.
+Wer Remix auf einem CDN betreibt, kann auch einen Adapter für Cloudflare oder Netlify verwenden.
+
+Wir werden Remix mit einem Node.JS Adapter verwenden.
+
+Den Source Code findet ihr auf github unter
+// TODO: add link
+
+Wir verwenden für unser Beispiel eine einfache Datenbank, die https://github.com/lerocha/chinook-database[Chinook Datenbank].
+Die Chinook Datenbank repräsentiert eine Musikverkaufsplattform mit Tabellen für Künstler, Alben, Tracks, Kunden, Bestellungen, ...
+
+Damit wir uns um die Remix-bezogenen Aspekte kümmern können, gibt es mit dem branch `blog-start` einen Startpunkt.
+Dort sind alle Tools und Technologien schon so aufgesetzt, dass wir loslegen können.
+
+Wir wollen eine Seite aufbauen, welche es erlaubt über eine Select-Box ein Album auszuwählen und wir bekommen dann im unteren Bereich die Tracks angezeigt.
+
+.Screenshot Album / Tracks Seite
+image::screenshot-albums.png[]
+
+Die Frage, die wir uns stellen müssen, ist wie wir die Seiten und angezeigte Daten auf Remix Routen mappen.
+Generell gibt es dazu mehrere Möglichkeiten:
+
+1. Wir bauen zwei Seiten und zwei Routen `/albums` und `/albums/:albumId/tracks`.
+Dabei müssen wir aber überlegen, wie wir vermeiden, dass die Select Box nicht doppelt genutzt wird
+2. Wir bauen verschachtelte Routen `/albums` und `/albums/:albumId/tracks`.
+Die erste Route stellt das generelle Layout bereit und die zweite Route wird an der entsprechenden Stelle eingebettet.
+Wir werden die zweite Version nutzen.
+
+== Layouts und Routen
+
+Der Layout-Code für die `/albums` Route sieht wie folgt aus:
+
+
+.Albums Komponente
+[source,typescript]
+----
+export default function Albums() {
+// einige Zeilen ausgelassen
+// ...
+  return (
+        <>
+            <h1>Albums</h1>
+
+            <Select data={[...comboBoxData]} placeholder={"Pick an album"} searchable name={"album"} <1>
+                    value={selectedAlbum}
+                    onChange={(value) => {
+                        setSelectedAlbum(value)
+                        const album = getAlbum(value)
+                        album ? navigate(`/albums/${album?.album_id}/tracks`) : navigate(`/albums`) <2>
+                    }}
+                    label={"Albums"}
+                    clearable
+            />
+            <Outlet/> <3>
+        </>
+    );
+  }
+----
+<1> Wir verwenden eine Select Box, um ein Album auszuwählen
+<2> Wenn ein Album ausgewählt wurde, navigieren wir zur "tracks" Route
+<3> Hier wird die eingebettete Route gerendert, wenn wir eine Album-Subroute ansteuern
+
+und der Layout-Code für die `/albums/:albumId/tracks` Route sieht wie in Listing <<track-component>> aus.
+Er stellt im Wesentlichen eine Tabelle dar.
+
+[[track-component]]
+.Track Komponente
+[source,typescript]
+----
+export default function Tracks() {
+   // einige Zeilen ausgelassen
+    return <>
+        <h1 id={"tracks"}>{album?.album_title}</h1>
+        <div>{album?.artist_name}</div>
+        <div>{tracks.length} tracks</div>
+        <MantineReactTable table={table}/>
+    </>
+}
+----
+
+Die Konvention ist, dass die Dateien im "routes" Ordner die Routen repräsentieren.
+
+[source]
+----
+src/
+   app/
+        routes/
+             albums.tsx <1>
+             albums.$id.tracks.tsx <2>
+----
+<1> Die Album Route
+<2> Die Tracks Route, mit einem dynamischen Segment `$id`, welches die Album ID repräsentiert.
+
+Es gibt eine sehr gute https://interactive-remix-routing-v2.netlify.app/actors/trending[Visualisierung] von Dilum Sanjaya, wie Routen auf dem Dateisystem zu URLs gemappt werden.
+
+Die hier dargestellte Konvention ist die bevorzugte Methode, um Routen in Remix zu definieren.
+Es gibt aber auch andere Möglichkeiten, etwa über Ordner oder eine komplett manuelle Konfiguration.
+
+INFO:: Was man hier sieht ist: ein Punkt `.` im Dateinamen wird zu einem `/` in der URL *und* sorgt für die Verschachtelung (nesting) der Routen.
+
+Da man mit den Dateinamen auch die möglichen URLs definiert, gibt es weitere Möglichkeiten, je nach Anwendungsfall, etwa
+
+* verschachtelte URLs ohne verschachteltes Layout
+* verschachtelte Layouts ohne verschachtelte URLs
+* Optionale URL Segmente
+* Splat Routes, die beliebig viele Segmente aufnehmen können (den Rest der URL)
+
+Die https://remix.run/docs/en/main/file-conventions/routes[Dokumentation] über Routen sollte man sich auf jeden Fall gründlich durchlesen, gerne auch nochmal, wenn man ein paar Seiten gebaut hat.
+
+== Das Route Module
+
+Nachdem wir die Routen definiert haben, müssen wir uns um das Data Loading kümmern.
+Unsere Routen enthalten aktuell nur den default export.
+
+Die Dateien (Routen), die wir oben erzeugt haben, sind Typescript (ESM) Module.
+Route Module kann verschiedene Exporte haben, die von Remix interpretiert werden.
+
+Zu den typischen Exporten gehören:
+
+* loader
+* action
+* Component (default export)
+* ErrorBoundary
+* headers
+
+Letztere Funktion wird häufig verwendet, um die Cache-Control Header (für öffentliche Routen) zu setzen.
+Details zu den verschiedenen Exporten findet sich unter dem Stichwort https://remix.run/docs/en/main/route/action[Route Module] in der Remix-Dokumentation.
+
+== Data Loading
+
+Wir wollen jetzt alle Alben laden, um sie in der Select Box anzuzeigen.
+Dazu verwenden wir den `loader` Export.
+
+[source,typescript]
+----
+export const loader = async ({request}: LoaderFunctionArgs) => {
+    const albums = await db.query.album_viewInChinook.findMany(); <1>
+    return json({albums});
+};
+----
+<1> Wir laden alle Alben aus der Datenbank
+
+Auf das Laden aus der Datenbank gehen wir hier nicht weiter ein.
+Die Anwendung verwendet drizzle-orm als ORM.
+
+Interessant ist die Rückgabe über die https://remix.run/docs/en/main/utils/json[json Hilfsfunktion].
+Sie erzeugt ein JSON Response Object, welches in der Komponente verwendet werden kann:
+
+[source,typescript]
+----
+export default function Albums() {
+    const {albums} = useLoaderData<typeof loader>();
+    // ...
+}
+----
+
+Dabei ist unerheblich, ob die Komponenten auf dem Server oder auf dem Client gerendert wird.
+Remix sorgt dafür, dass die Daten, die im Loader geladen wurden in der Komponente genutzt werden können.
+Danach kann man einfach auf das Typescript Objekt zugreifen.
+Dies vereinfacht das Zusammenspiel mit dem Backend enorm.
+
+== Navigation
+
+Wir verwenden dort eine Mantine Select Box.
+Mittels `onChange` navigieren wir zur nächsten Route.
+Dazu verwenden wir einen weiteren Remix Hook `useNavigate`.
+
+[source,typescript]
+----
+onChange={(value) => {
+                        setSelectedAlbum(value)
+                        const album = getAlbum(value)
+                        album ? navigate(`/albums/${album?.album_id}/tracks`) : navigate(`/albums`) <2>
+                    }}
+----
+
+Wenn ein Album ausgewählt wurde, dann navigieren wir die Route an, welche auch die Tracks darstellt.
+Im anderen Fall, wenn etwa die Select-Box geleert wird, navigieren wir zurück zur Album-Route.
+
+Remix stammt von den Machern von https://reactrouter.com/en/main[React Router].
+In der Zwischenzeit schreiben sie auf der Webseite schon "Made by Remix".
+`<Outlet/>`, `loader()`, `useNavigate()`, `json()` und viele andere Hooks und Utilities finden sich auch in React Router.
+Bei Remix sind die Module aber aus `@remix-run/react` zu importieren.
+
+Dies bedeutet aber auch, dass das Wissen für beide Frameworks wiederverwendet werden kann.
+React Router kennt ebenso das Konzept von verschachtelten Routen.
+Manchmal ist es hilfreich auch in die Dokumentation von React Router zu schauen, wenn man etwas in der Remix-Dokumentation nicht findet.
+
+== Die Track-Route und ErrorBoundaries
+
+Hier gibt es nichts Neues bzgl. des Ladens und Anzeigen der Tracks.
+Wir nutzen hier https://www.mantine-react-table.com[Mantine React Table] um die Tracks anzuzeigen.
+
+Wir können aber hier die Funktion der Error Boundaries betrachten.
+
+Dazu definieren wir im Track-Modul eine Funktion `ErrorBoundary`:
+
+[source,typescript]
+----
+export function ErrorBoundary() {
+    const error = useRouteError()
+    console.log(error)
+    return <div>
+        <h1>Nothing to Display</h1>
+    </div>
+}
+----
+
+Wenn wir jetzt im Loader einen Fehler werfen:
+
+[source,typescript]
+----
+export const loader = async ({request, params}: LoaderFunctionArgs) => {
+
+    // ausgeblendeter Code...
+
+    throw new Error('test')
+    return json({tracks, album});
+}
+----
+
+Dann sehen wir statt der Track Liste die Fehlermeldung "Nothing to Display".
+Es ist also nur ein Teil der Seite betroffen und nicht die gesamte Anwendung.
+
+In der neuesten React Router Version 6.4 gibt es für die data router ebenfalls die Möglichkeit, Error Boundaries zu https://reactrouter.com/en/main/hooks/use-route-error[definieren].
+
+
+== Fazit
+
+Das Laden von Daten, Navigation und Error Boundaries sind die wichtigsten Konzepte.
+Dadurch, dass Remix das Thema REST Kommunikation kapselt, vereinfacht es die Kommunikation mit dem Backend enorm.

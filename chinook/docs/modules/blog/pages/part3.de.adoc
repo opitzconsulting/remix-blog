@@ -1,0 +1,192 @@
+= Formulare, Validierung und Datenänderungen
+
+Wir haben im letzten Blog-Post gesehen, wie wir Daten lesen und anzeigen können.
+Gerade für Geschäftsanwendungen ist es aber auch wichtig, Daten zu erstellen und ändern zu können.
+Dazu gibt es im HTML Standard Formulare.
+Remix folgt auch da seiner Philosophie, dass es auf Webstandards aufbaut und diese Formulare als zentrales Element für die Kommunikation von Datenänderungen mit dem Backend nutzt, statt alles auf eine separate REST Kommunikation aufzubauen.
+
+Dazu nehmen wir den Kunden aus der Chinook-Datenbank und erstellen ein Formular, um die Daten zu ändern.
+
+Wir erstellen die Routen (Route Module)
+
+// Warum hast du dich gegen eine Index-Route für die Customers-Übersicht entschieden?
+* `customers` als Layout, welche aktuell nur den Header bereitstellt
+* `customers._index` für die Übersicht der Kunden
+* `customers.edit.$id` für die Bearbeitung eines Kunden
+* `customers.create` für das Anlegen eines neuen Kunden
+* `customers.delete` für das Löschen eines Kunden
+
+== Die action Funktion
+
+Die Route Module haben einen weiteren Export, die `action` Funktion.
+Diese wird bei non-GET Anfragen (`DELETE`, `POST`, `PUT`, `PATCH`) aufgerufen, bevor die `loader` Funktion aufgerufen wird.
+Die Loader Funktion wird aufgerufen, um die geänderten Daten zu laden und zu revalidieren.
+Damit wird ein State Abgleich zwischen Server und Client hergestellt.
+
+Remix optimiert in der Regel welche Loader Funktionen aufgerufen werden müssen und wann.
+Zusätzlich, falls benötigt, kann dies über die Funktion https://remix.run/docs/en/main/route/should-revalidate[`shouldRevalidate`] gesteuert werden.
+
+Wie der `loader` ist `action` Teil der öffentlichen API.
+Daten, die wir über die Action Funktion empfangen, müssen wie jede Art von Daten aus dem Web validiert werden.
+
+Und damit kommen wir zu einem weiteren wesentlichen Aspekte: der Validierung von Eingabedaten.
+
+== Validierung
+
+Formulareingaben müssen validiert werden.
+Bei Webanwendungen passiert dies in der Regel sowohl auf der Client- wie auch auf der Serverseite.
+Dabei ist die Validierung auf der Serverseite ein Muss, da die Clientseite manipuliert werden kann.
+
+Wie schaffen wir es, dass wir die Validierungslogik nur einmal schreiben müssen und sowohl auf der Client- wie auch auf der Serverseite verwenden können?
+Dies wäre ein großer Vorteil für die Wartbarkeit und die Sicherheit der Anwendung.
+
+Viele Ansätze setzen dabei auf die Validierung von Schemata.
+Eine Bibliothek, die dies ermöglicht, ist https://zod.dev[`zod`].
+
+Eine beliebte Library für die Form Validierung in React ist https://react-hook-form.com[`react-hook-form`].
+Diese Bibliothek kann mit `zod` kombiniert werden, um die Validierung auf der Clientseite zu übernehmen.
+
+Mit https://github.com/forge42dev/remix-hook-form[`remix-hook-form`] gibt es eine für Remix abgestimmte Integration von `react-hook-form`.
+Dieser Adapter ist im Kern keine 300 Zeilen lang.
+
+Andere Vertreter sind
+
+* https://www.remix-validated-form.io[remix-validated-form]
+* https://github.com/seasonedcc/remix-forms[remix-forms]
+* https://github.com/edmundhung/conform[conform]
+
+Jede der Bibliotheken wird in der Regel mit `zod` kombiniert, um die Validierung auf der Serverseite zu übernehmen.
+Wir haben uns für remix-hook-form entschieden, da es auf react-hook-form aufsetzt, welches für andere Projekte bereits verwendet wird.
+
+== Unsere action Funktion
+
+In `customers._create.tsx" haben wir folgende `action` Funktion:
+
+[source,typescript]
+----
+const resolver = zodResolver(customerCreateForm);
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+	const {
+		errors,
+		data,
+		receivedValues: defaultValues,
+	} = await getValidatedFormData<CustomerCreateForm>(request, resolver);
+	if (errors) {
+		return json({ errors, defaultValues });
+	}
+	const insertedCustomers = await db
+		.insert(customerInChinook)
+		.values(data)
+		.returning();
+	if (insertedCustomers.length === 0) {
+		return json({ errors: { root: { type: "insert_failed" } } });
+	}
+	return redirect(`/customers/edit/${insertedCustomers[0].customer_id}`);
+};
+----
+
+Die Funktion verwendet die `getValidatedFormData` Funktion von remix-hook-form, um die Daten gegen das `CustomerCreateForm`-Schema zu validieren.
+Falls Fehler auftreten, werden diese zurückgegeben.
+remix-hook-form kümmert sich um die Interpretion der Fehler und der `defaultValues` für das Formular.
+Die Magic passiert dabei im Hook `useRemixForm`, welches einen angepassten submitHandler bereitstellt.
+
+Die Nutzung in der Komponente ist dabei sehr einfach:
+
+[source,typescript]
+----
+export default function CustomersCreate() {
+	const {
+		handleSubmit,
+		formState: { errors },
+		register,
+	} = useRemixForm<CustomerCreateForm>({
+		mode: "onSubmit",
+		reValidateMode: "onBlur",
+		resolver,
+	});
+
+	return (
+		<>
+            <Form onSubmit={handleSubmit} method={"post"}>
+                        <TextInput
+                            placeholder="First Name"
+                            label={"First Name"}
+                            {...register("first_name")}
+                            error={errors.first_name?.message}
+                        />
+                    <Button type="submit">
+                        Submit
+                    </Button>
+            </Form>
+        </>
+    );
+}
+
+----
+
+Im Source Code wurden die Formatierungen weggelasen, um die Lesbarkeit zu erhöhen.
+
+Etwas mehr Aufwand ist notwendig, wenn es sich um https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components[controlled Komponenten] handelt.
+Dies wird in der Dokumentation von https://react-hook-form.com/get-started#IntegratingControlledInputs[react-hook-form] beschrieben.
+
+Dies führt schnell dazu, dass es für eine Select Komponente (hier `customer_.edit.$id.tsx`) umfangreicher werden kann:
+
+[source,typescript]
+----
+<Controller
+    name="support_rep_id"
+    control={control}
+    render={({ field }) => {
+        // Map salesReps to Select options
+        const options: SelectOption[] = [
+            {
+                value: "",
+                label: "None",
+            },
+            ...salesReps.map(
+                (salesRep) =>
+                    ({
+                        value: salesRep.employee_id?.toString(),
+                        label: salesRep.name,
+                    }) as SelectOption,
+            ),
+        ];
+
+        // Set the Select component's value to match the current field value
+        const selectedValue = options.find(
+            (option) => option.value === (field.value?.toString() || ""),
+        );
+
+        return (
+            <Select
+                label="Sales Agent"
+                placeholder="Select sales agent"
+                {...field}
+                data={options}
+                value={selectedValue?.value}
+                onChange={(value) => {
+                    field.onChange(
+                        value ? Number.parseInt(value || "") : null,
+                    );
+                }}
+            />
+        );
+    }}
+/>
+----
+
+== Hinweise
+
+Auch wenn der Zugriff auf die Datenbank hier sehr einfach ist, ist es sinnvoll diese Zugriffe aus den Routen herauszunehmen und in eigene Module zu kapseln.
+Das macht die Routen übersichtlicher und erleichtert das Testen und ermöglicht mehr Flexibilität.
+Häufig kommen in der `action` noch kleine Logiken hinzu, etwa um weitere Daten zu laden und zu speichern.
+Dies kommt daher, dass häufig das Formularmodell nicht 1:1 mit dem Datenbankmodell übereinstimmt und noch weitere Daten benötigt werden.
+
+Für unseren Code überlassen wir das Refactoring dem Leser.
+
+== Zusammenfassung
+
+Wir haben gesehen, dass die Erstellung von Forms in Remix mit der Komplexität in React vergleichbar ist.
+Aber durch die Verwendung von `zod` und `remix-hook-form` können wir die Validierung auf der Client- und Serverseite vereinheitlichen.
+Wir haben also alle Zutaten, um CRUD Funktionen in Remix zu implementieren.

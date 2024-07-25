@@ -1,0 +1,207 @@
+= Remix eine Alternative für Geschäftsanwendungen
+
+In diesem Blog möchte ich euch Remix als eine vielversprechende Alternative zur Entwicklung von Geschäftsanwendungen vorstellen.
+
+== Rückblick auf die Vergangenheit
+Vor 10-15 Jahren noch war es üblich Geschäftsanwendungen mittels Server-seitigem Rendering zu entwickeln.
+Frameworks wie PHP, Ruby on Rails, ASP.NET oder Java Server Faces dominierten diese Ära.
+Die Anwendungen wurden auf dem Server gerendert und als HTML an den Browser ausgeliefert.
+
+JavaScript war damals nicht sehr populär, da Browser noch nicht so standardisiert und performant wie heute waren.
+
+Allerdings hatten diese serverseitig gerenderten Anwendungen gegenüber klassischen Desktop-Anwendungen, die sie ablösen sollten, einen entscheidenden Nachteil: Sie waren nicht so responsiv und interaktiv. Der ständige Austausch mit dem Server führte zu einer langsamen Benutzererfahrung.
+
+== Die Ära der Single Page Applications (SPA)
+
+Mit der Einführung von AJAX und später Single Page Applications (SPA) änderte sich dies. Anwendungen wurden interaktiver und responsiver. SPAs kommunizieren über HTTP APIs, die Daten im JSON-Format austauschen, wodurch das Frontend im Browser gerendert und die Daten über APIs geladen werden. Dies führte zur Verbreitung des REST-Paradigmas.
+
+.Klassische SPA Architektur
+[plantuml,spa-classic,svg]
+----
+include::example$spa-classic.puml[]
+----
+
+== Herausforderungen und Komplexität von SPAs
+Die Umstellung auf SPAs brachte jedoch einige Herausforderungen mit sich:
+
+Komplexität der Netzwerkkommunikation: Daten mussten häufig mehrfach gemappt werden, was fehleranfällig und zeitaufwendig war.
+Overfetching und Underfetching: REST-APIs lieferten oft entweder zu viele oder zu wenige Daten, was zu ineffizientem Datenmanagement führte.
+Fragmentierung der Daten: Durch die Einführung von Microservices wurden Daten auf verschiedene Services verteilt, was die Datenabfrage komplexer machte.
+
+[[whitebox-spa]]
+.Whitebox SPA
+[plantuml,spa-classic-whitebox,svg]
+----
+include::example$spa-classic-whitebox.puml[]
+----
+
+Die Komplexität liegt auch darin begründet, dass viel "Boilerplate" Code geschrieben wird, um Daten zwischen Datenbank und UI auszutauschen.
+In der in Abbildung <<whitebox-spa>> gezeigten Architektur bedeutet dies:
+
+1. Definition von JPA Entites und *Mapping* zwischen SQL und Java Objekten
+2. *Mapping* zwischen Java Objekten und JSON
+
+Wir haben hier ein Objektmodell, ein JSON Modell und Mappings drin, die gepflegt werden müssen.
+Dies ist nicht nur fehleranfällig, sondern auch zeitaufwändig.
+
+Für bestimmte Use Cases helfen Ansätze, wie Spring Data REST weiter, welche zum Teil das Mapping automatisieren, zumindest Richtung REST.
+Dies führt dann wieder zu einem Code First Ansatz für REST Schnittstellen.
+Dies kann in Ordnung sein, wenn es sich um "private" Schnittstellen handelt.
+Leider ist die Trennung zwischen "privaten" und öffentlichen Business API Schnittstellen nicht immer so klar.
+Private Schnittstellen sind z.B. von einem BFF (Backend for Frontend) für ein bestimmtes UI optimierten und bereit gestellten Schnittstellen.
+Dies führt schnell dazu, dass wir eine "Business API" vorsehen, aber bei einer spezifischen BFF Schnittstelle landen, die eigentlich privat sein sollte.
+Ferner sehen wir, dass wir Validierungslogik häufig doppelt implementieren.
+Hier können generierende Ansätze helfen, die aus Java Klassen (Annotationen) entsprechende zod Schemata generieren.
+Mein Kollege ist darauf in seinem Post https://thecattlecrew.net/2024/07/08/validieren-mit-zod-zwischen-frontend-und-backend/[Validieren mit Zod: zwischen Frontend und Backend] eingegangen.
+
+== Lösungsansätze: BFF und GraphQL
+
+Aber so langsam wurden auch einige Probleme sichtbar bei der Benutzung von REST.
+Es ist nicht so einfach bei einem REST Architekturstil die Daten so zu laden, wie das Frontend sie für einen bestimmten Use Case benötigt.
+Es gibt Overfetching und Underfetching, also es werden zu viele oder zu wenige Daten vom Backend geladen.
+Das Overfetching hat zur Folge, dass die Latenzzeit und gerade auch im mobilen Bereich die Datenmenge, die übertragen werden muss, steigt.
+Underfetching hat zur Folge, dass mehrere Requests gemacht werden müssen, um die Daten zu laden, die für einen Use Case benötigt werden.
+Dies erhöht die Latenzzeit und die Komplexität der Anwendung.
+Gleichzeitig muss das Frontend wissen, welche Endpunkte es ansprechen muss, um die Daten zu laden.
+Mit der Einführung von Microservices, ist dies häufig nicht mehr so einfach, da die Daten auf verschiedene Services verteilt sind.
+
+Um das Problem zu lösen, gibt es verschiedene Lösungen.
+Zum einen wurde je Frontend ein spezielles Backend entwickelt, welches die Daten so liefert, wie das Frontend sie benötigt.
+Diese Lösung ist als https://bff-patterns.com["Backend for Frontend"] bekannt.
+
+Eine andere Lösung ist die Einführung von GraphQL oder Falcor.
+Diese Technologien erlauben es dem Frontend, die Daten zu laden, die es benötigt.
+Hier hat sich klar GraphQL durchgesetzt.
+Der GraphQL Server fungiert dabei häufig als Gateway zu den Microservices.
+Das Frontend braucht nur noch den GraphQL Server ansprechen und bekommt die Daten, die es benötigt.
+
+Wer ein Frontend auf mehrere Backend Microservices aufsetzen muss, ist immer noch mit dieser Technologie oder anderen Technologien, die das gleiche Problem lösen, gut beraten, wie etwa tRPC.
+
+Allerdings wird diese Komplexität für viele Geschäftsanwendungen mit einer überschaubaren Nutzerbasis gar nicht benötigt.
+Man würde gerne die Vorteile von Single Page Applications nutzen, aber nicht die Komplexität, die damit einhergeht.
+Die Entwicklung solcher Anwendungen scheint damit zu teuer und zu komplex zu werden.
+
+== Lösungsansatz: Low Code
+Vielleicht ist dies auch eine der Motivatoren für den Trend zu No-Code und Low-Code Plattformen.
+Sie versprechen die Entwicklung solcher Anwendungen drastisch zu vereinfachen zu beschleunigen.
+Aus meiner Sicht aber geht das auf Kosten der Flexibilität und der Kontrolle über die Anwendungen.
+Es kommt zu einem starken Vendor Lock in.
+Irgendwie erinnert mich das an die 90er Jahre und das Aufkommen von https://de.wikipedia.org/wiki/4GL[4GL Sprachen].
+Der Wechsel zu einer anderen Technologie kann schwierig und kostspielig werden.
+Low-Code Plattformen sind sehr "opinionated" in der Art und Weise, wie Software entwickelt wird.
+Sie bieten vorgefertigte Bausteine und Prozesse, welche die Entwicklung beschleunigen können, bei spezifischen Anforderungen aber an Grenzen stoßen können.
+Häufig sind sie aus meiner Sicht ebenfalls ein Rückschritt in der Softwareentwicklung.
+Wenige unterstützen sauberes Unit Testing und die Integration in CI/CD Pipelines.
+Ebenfalls stellen wir immer wieder fest, dass die Entwicklungskosten gesenkt werden, aber die Gesamtkosten aufgrund von Lizenzkosten und Abo-Gebühren steigen.
+Gerade, wenn dann die Nutzeranzahl steigt, kann es schnell teuer werden.
+Aufgrund der hohen Abhängigkeit von den Plattformen, kann es auch schwierig werden, die Anwendung zu skalieren oder zu migrieren.
+Gleichzeitig benötigt man für die Entwicklung dieser Anwendungen auch noch Entwickler, die sich mit der Plattform auskennen.
+Die Plattformen sind also nicht so einfach zu bedienen, wie es auf den ersten Blick scheint.
+
+Wenn aber an den Verkaufsargumenten für Low Code Plattformen etwas dran ist: Entwicklungsgeschwindigkeit und Entwicklungskosten zu senken, wir aber gleichzeitig keine Kompromisse bei Standard-Technologien und einem relativ un-opinionated Ansatz machen wollen, was gibt es für Alternativen?
+
+== Lösungsansatz: Fullstack Frameworks
+
+Hier kommt Remix ins Spiel.
+Remix ist ein sogenanntes Fullstack Framework, welches auf React und React-Router aufsetzt.
+https://nextjs.org[Next.js] ist der Platzhirsch im React Umfeld, aber auch für die anderen SPA Frameworks gibt es Fullstack Frameworks, wie https://nuxt.com[Nuxt.js] für Vue.js oder https://kit.svelte.dev[SvelteKit] für Svelte.
+Nur für Angular ist das Angebot dünn.
+Es gibt mit https://analogjs.org[Analog] ein Fullstack Framework, welches auf Angular aufsetzt, aber es ist noch nicht so ausgereift wie die anderen Frameworks.
+
+Viele der Fullstack Frameworks motivieren sich über den Aspekt der Search-Engine-Optimierung (SEO).
+Da HTML Seiten auf dem Server gerendert werden, sind diese Anwendungen für Suchmaschinen unter Umständen besser geeignet.
+Dies ist sicherlich wichtig für Anwendungen, die öffentlich zugänglich sind und von Suchmaschinen indexiert werden sollen.
+Für interne Anwendungen ist der SEO Aspekt weniger interessant.
+
+Der generelle Aufbau sieht wie folgt aus
+
+.Whitebox Remix
+[plantuml,remix-whitebox,svg]
+----
+include::example$remix-whitebox.puml[]
+----
+
+Im Gegensatz zum ersten Ansatz mit dem Ökosystem-Bruch (JavaScript / Java), haben wir hier einen durchgängigen Ansatz.
+Wir brauchen keine unnötigen Mappings definieren, da wir direkt JSON aus der Datenbank bekommen.
+// JSON aus der Datenbank? Das ist dann aber über Prisma und hat nichts mit Remix zu tun, richtig?
+Außerdem definieren wir einmal die Validierungslogik für die Daten und können diese sowohl im Frontend als auch im Backend nutzen.
+Remix sorgt als Aufsatz auf "React Router" dafür, dass folgende vier Dinge bereitgestellt werden:
+
+1. ein Compiler
+2. ein HTTP Handler (Runtime Server Adapter)
+3. ein Server Framework
+4. ein Browser Framework
+
+Eine detaillerte Beschreibung findet sich in der https://remix.run/docs/en/main/discussion/introduction[Remix Dokumentation].
+Einer der wesentlichen Unterschiede zu der Entwicklung mit einer REST API, wie Spring MVC ist, dass Remix
+UI zentrisch ist.
+Während bei der Implementierung einer REST API man einen Controller implementiert, der mehrere URLS für ein einzelnes Modell bereitstellt, ist bei Remix immer eine Datei für Laden, Manipulation und Layout zuständig.
+Dabei kann eine Route auf ein Segment einer URL mappen.
+Remix aggregiert die Daten und Komponenten, um dann die komplette UI auszuliefern.
+
+Mit diesem Ansatz erfüllt einige der Anforderungen, die wir an eine Geschäftsanwendung haben:
+
+* Serverseitiger Zugriff auf Datenbanken
+* Authentifizierung und Autorisierung
+* Testbarkeit
+* Integration von Front- und Backend, ohne dass wir uns um die Details kümmern müssen
+
+Einiges davon wird schon durch das Node.js Ökosystem abgedeckt.
+Aber gerade der letzte Punkt ist die Domäne der Fullstack Frameworks.
+Dies wird als Hydration und Dehydration bezeichnet.
+
+== React Ökosystem für Geschäftsanwendungen
+
+Für Geschäftsanwendungen ebenfalls häufig wichtig sind aus meiner Sicht zwei Dinge:
+
+* Mächtige Tabellen
+* Formulare und Validierung
+
+Dies wird nicht von Remix bereitgestellt.
+
+Für Tabellen setzen wir auf Mantine-React-Tables bzw.
+Material-React-Tables.
+Diese Komponenten setzen wiederum auf der (headless) Tanstack Table auf.
+Neben der (kommerziellen) https://www.ag-grid.com[ag-grid] Komponente ist das sicherlich eine der mächtigsten Tabellenkomponenten im React Umfeld.
+
+Für Formulare und Validierung setzen wir auf remix-hook-form, eine kleine Erweiterung von react-hook-form.
+
+Stellt sich aber immer noch die Frage, warum wir Remix statt Next.js einsetzen.
+Letzteres ist doch der Platzhirsch im React Umfeld.
+Bei prisimic gibt es einen https://prismic.io/blog/compare-remix-vs-nextjs#should-you-use-remix-or-next[Blogpost], der die beiden Frameworks vergleicht.
+
+== Motivation für Remix
+
+Für die Wahl von Remix als Technologie statt des Platzhirsches war:
+
+* Remix setzt auf React Router auf (d.h. wir können Wissen wiederverwenden, etwa auch für klassische React Projekte)
+* Nutzung an Web Standards (Flexiblität für unterschiedliche Einsatzszenarien)
+* Keine ("unnötigen") Extra-Features
+* Automatische State Synchronisation zwischen Server und UI, wenn wir für die Manipulation von Daten Actions verwenden
+
+Insgesamt bietet Remix genau das, was wir brauchen, um eine Fullstack React Anwendung zu bauen ohne weiteren Overhead.
+D.h. die Lernkurve ist relativ flach und man ist schnell produktiv.
+
+Zum Punkt "unnötigte" Extra Features. Das ist natürlich immer eine Frage des Standpunkts.
+
+Aber einiges, was Next.JS anbietet, wie Static Site Generate oder Incremental Static Regeneration ist für Geschäftsanwendungen weniger wichtig, denn es ist eher fragwürdig Daten zu cachen, die ein Nutzer ändern kann.
+HTTP caching ist für öffentliche Daten, welche durch Back-Office Prozesse aktualisiert werden.
+Da sind wir ganz bei Ryan Florence https://github.com/remix-run/remix/discussions/1228[Standpunkt], einem der Köpfe hinter Remix.
+Hier empfehle ich https://youtu.be/bfLFHp7Sbkg?si=T6ROk_sOkch_J8We[CDN Caching, SSG, and SSR] von ihm.
+Und was er erzählt ist nicht nur relevant für CDN Caching, sondern für jede Art von Reverse Proxy vor dem eigentlichen Server, d.h. auch wenn wir etwa einen Caddy Server oder einen Nginx Server vor unserem Node.js Server haben.
+
+Bisher haben wir eine reine React Fullstack Anwendung gesehen.
+Was wir aber häufig antreffen, ist eine Aufteilung: Für alle UI relevanten Aspekte wird Remix verwendet, für Integration mit Fremdsystemen und komplexe Business Logik ein Java Backend.
+Die Integration mit Umsystemen soll ja auch möglichst asynchron erfolgen, ggf. werden sie gecacht.
+Die Beantwortung einer UI Integration sollte dann möglichst innerhalb des eigenen Systems erfolgen.
+
+Daher sehen wir Remix bei etwas komplexeren Anforderungen nicht alleine, sondern in Kombination mit einem Java Backend.
+
+.Komplexere Remix / Spring Architektur
+[plantuml,complex-remix-spring,svg]
+----
+include::example$complex-remix-spring.puml[]
+----
+
+Das wäre es für diesen Post.
+In den folgenden Posts schauen wir uns an, wie sich Remix anfühlt, wenn wir damit entwickelt und einen einfachen CRUD use case umsetzen.
