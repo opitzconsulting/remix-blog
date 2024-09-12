@@ -9,8 +9,7 @@ Dazu nehmen wir den Kunden aus der Chinook-Datenbank und erstellen ein Formular,
 
 Wir erstellen die Routen (Route Module)
 
-// Warum hast du dich gegen eine Index-Route für die Customers-Übersicht entschieden?
-* `customers` als Layout, welche aktuell nur den Header bereitstellt
+* `customers` als Layout, welches aktuell nur den Header bereitstellt
 * `customers._index` für die Übersicht der Kunden
 * `customers.edit.$id` für die Bearbeitung eines Kunden
 * `customers.create` für das Anlegen eines neuen Kunden
@@ -21,7 +20,7 @@ Wir erstellen die Routen (Route Module)
 Die Route Module haben einen weiteren Export, die `action` Funktion.
 Diese wird bei non-GET Anfragen (`DELETE`, `POST`, `PUT`, `PATCH`) aufgerufen, bevor die `loader` Funktion aufgerufen wird.
 Die Loader Funktion wird aufgerufen, um die geänderten Daten zu laden und zu revalidieren.
-Damit wird ein State Abgleich zwischen Server und Client hergestellt.
+Damit wird ein Statusabgleich zwischen Server und Client hergestellt.
 
 Remix optimiert in der Regel welche Loader Funktionen aufgerufen werden müssen und wann.
 Zusätzlich, falls benötigt, kann dies über die Funktion https://remix.run/docs/en/main/route/should-revalidate[`shouldRevalidate`] gesteuert werden.
@@ -29,7 +28,7 @@ Zusätzlich, falls benötigt, kann dies über die Funktion https://remix.run/doc
 Wie der `loader` ist `action` Teil der öffentlichen API.
 Daten, die wir über die Action Funktion empfangen, müssen wie jede Art von Daten aus dem Web validiert werden.
 
-Und damit kommen wir zu einem weiteren wesentlichen Aspekte: der Validierung von Eingabedaten.
+Und damit kommen wir zu einem weiteren wesentlichen Aspekt: der Validierung von Eingabedaten.
 
 == Validierung
 
