@@ -86,89 +86,11 @@ export function Layout() {
                             direction={"row"}
                             flex={1}
                         >
-                            <ColorSchemeToggle/>
                         </Flex>
                     </Flex>
                 </AppShell.Header>
 
                 <AppShell.Navbar p={"md"}>
-                    <h2>App</h2>
-                    <List>
-                        <List.Item>
-                            <Link to={"/albums"} prefetch={"intent"}>
-                                Albums
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"/customers"} prefetch={"intent"}>
-                                Customers
-                            </Link>{" "}
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"/invoices"} prefetch={"intent"}>
-                                Invoices
-                            </Link>
-                        </List.Item>
-                    </List>
-                    <h2>Docs</h2>
-                    <List>
-                        <List.Item>
-                            <Link to={"https://github.com/lerocha/chinook-database"}>
-                                Chinook Database (data source)
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://yarnpkg.com"}>Yarn</Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://remix.run/docs/en/main"}>Remix Docs</Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://mantine.dev/docs/getting-started/"}>
-                                Mantine Docs
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://www.mantine-react-table.com"}>
-                                Mantine React Table
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://github.com/forge42dev/remix-hook-form"}>
-                                Remix Hook Form
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://react-hook-form.com"}>
-                                React Hook Form
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://orm.drizzle.team/docs/overview"}>
-                                Drizzle ORM
-                            </Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://zod.dev"}>Zod</Link>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://www.typescriptlang.org"}>Typescript</Link>
-                            <List withPadding={true}>
-                                <List.Item>
-                                    <Link
-                                        to={
-                                            "https://www.typescriptlang.org/docs/handbook/variable-declarations.html#destructuring"
-                                        }
-                                    >
-                                        Destructuring
-                                    </Link>
-                                </List.Item>
-                            </List>
-                        </List.Item>
-                        <List.Item>
-                            <Link to={"https://biomejs.dev"}>Biome</Link>
-                        </List.Item>
-                    </List>
                 </AppShell.Navbar>
                 <AppShell.Main>
                     {error ? <ErrorBoundary/> : <Outlet/>}

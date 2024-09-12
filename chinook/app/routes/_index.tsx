@@ -13,14 +13,6 @@ export default function Index() {
 	return (
 		<div className="font-sans p-4">
 			<h1 className="text-3xl">Welcome to Remix</h1>
-			<List>
-				<List.Item>
-					<Link to={"/albums"} prefetch={"intent"}>
-						Albums
-					</Link>
-				</List.Item>
-				<List.Item>Remix Docs</List.Item>
-			</List>
 		</div>
 	);
 }
