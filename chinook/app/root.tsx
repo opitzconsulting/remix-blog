@@ -2,21 +2,10 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css"; //if using mantine date picker features
 import "mantine-react-table/styles.css"; //make sure MRT styles were imported in your app root (once)
 import "@mantine/notifications/styles.css";
-import {
-	AppShell,
-	Burger,
-	ColorSchemeScript,
-	Flex,
-	List,
-	MantineProvider,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Notifications } from "@mantine/notifications";
-import {
-	type LoaderFunctionArgs,
-	type MetaFunction,
-	json,
-} from "@remix-run/node";
+import {AppShell, Burger, ColorSchemeScript, Flex, List, MantineProvider,} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
+import {Notifications} from "@mantine/notifications";
+import {json, type LoaderFunctionArgs, type MetaFunction,} from "@remix-run/node";
 import {
 	Link,
 	Links,
@@ -27,11 +16,10 @@ import {
 	useRouteError,
 	useRouteLoaderData,
 } from "@remix-run/react";
-import { useTranslation } from "react-i18next";
-import { useChangeLanguage } from "remix-i18next/react";
-import { ColorSchemeToggle } from "~/components/ColorSchemeToggle";
+import {useTranslation} from "react-i18next";
+import {useChangeLanguage} from "remix-i18next/react";
 import i18next from "~/i18next.server";
-import { theme } from "~/theme";
+import {theme} from "~/theme";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -48,7 +36,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	return json({ locale });
 };
 
-export function Layout() {
+export function Layout({ children }: { children: React.ReactNode }) {
 	const { locale = "en" } = { ...useRouteLoaderData<typeof loader>("root") };
 	const { i18n } = useTranslation();
 	const [opened, { toggle }] = useDisclosure();
@@ -100,10 +88,14 @@ export function Layout() {
 							</Flex>
 						</AppShell.Header>
 
-						<AppShell.Navbar p={"md"} />
-						<AppShell.Main>
-							{error ? <ErrorBoundary /> : <Outlet />}
-						</AppShell.Main>
+						<AppShell.Navbar p={"md"}>
+							<List>
+								<List.Item>
+									<Link to={"/employees"}>Employees</Link>
+								</List.Item>
+							</List>
+						</AppShell.Navbar>
+						<AppShell.Main>{children}</AppShell.Main>
 					</AppShell>
 				</MantineProvider>
 				<ScrollRestoration />
