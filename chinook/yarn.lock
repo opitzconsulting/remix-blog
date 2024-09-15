@@ -2608,6 +2608,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^10":
+  version: 10.0.0
+  resolution: "@types/uuid@npm:10.0.0"
+  checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^6.21.0":
   version: 6.21.0
   resolution: "@typescript-eslint/eslint-plugin@npm:6.21.0"
@@ -3746,6 +3753,7 @@ __metadata:
     "@types/pg": "npm:^8.11.6"
     "@types/react": "npm:^18.3.4"
     "@types/react-dom": "npm:^18.3.0"
+    "@types/uuid": "npm:^10"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
     "@vitest/coverage-v8": "npm:^2.0.5"
@@ -3754,6 +3762,7 @@ __metadata:
     autoprefixer: "npm:^10.4.20"
     clsx: "npm:^2.1.1"
     dayjs: "npm:^1.11.13"
+    dotenv: "npm:^16.4.5"
     drizzle-kit: "npm:^0.24.0"
     drizzle-orm: "npm:^0.33.0"
     drizzle-zod: "npm:^0.5.1"
@@ -3780,11 +3789,14 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.52.2"
     react-i18next: "npm:^15.0.1"
+    remix-auth: "npm:^3.7.0"
     remix-hook-form: "npm:^5.0.4"
     remix-i18next: "npm:^6.3.0"
+    remix-keycloak: "npm:^2.0.4"
     remix-utils: "npm:^7.6.0"
     tailwindcss: "npm:^3.4.10"
     typescript: "npm:^5.5.4"
+    uuid: "npm:^10.0.0"
     vite: "npm:^5.4.2"
     vite-tsconfig-paths: "npm:^4.3.2"
     vitest: "npm:^2.0.5"
@@ -10293,6 +10305,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remix-auth-oauth2@npm:^1.2.2":
+  version: 1.11.2
+  resolution: "remix-auth-oauth2@npm:1.11.2"
+  dependencies:
+    debug: "npm:^4.3.4"
+    uuid: "npm:^9.0.1"
+  peerDependencies:
+    "@remix-run/server-runtime": ^1.0.0 || ^2.0.0
+    remix-auth: ^3.6.0
+  checksum: 10c0/382cfcc05d4261d98f34b4d1af79f4b526718b2ff4713c374f4a811f08340b52903458b06d98266de40ab5b786326004417d48a05f38f8a10058ee5f0c2066f5
+  languageName: node
+  linkType: hard
+
+"remix-auth@npm:^3.2.2, remix-auth@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "remix-auth@npm:3.7.0"
+  dependencies:
+    uuid: "npm:^8.3.2"
+  peerDependencies:
+    "@remix-run/react": ^1.0.0 || ^2.0.0
+    "@remix-run/server-runtime": ^1.0.0 || ^2.0.0
+  checksum: 10c0/25242a94a2de15b0efac2fd81d66af26778fbfd5f34de3de94ff72a9f828f6ec4cc631a23d1f96c8b8c0e6221a10a29e098a1d6c058e264ba06f8739189bcccf
+  languageName: node
+  linkType: hard
+
 "remix-hook-form@npm:^5.0.4":
   version: 5.0.4
   resolution: "remix-hook-form@npm:5.0.4"
@@ -10324,6 +10361,18 @@ __metadata:
     "@remix-run/node":
       optional: true
   checksum: 10c0/c03800b67f88866a00d814b42702e3161f15a5e211dcd6bf85fce6d4fb6fa038aeee36195112433c6f6e6563ef49163db0ecca2ac48301c4d5ba18c7be713582
+  languageName: node
+  linkType: hard
+
+"remix-keycloak@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "remix-keycloak@npm:2.0.4"
+  dependencies:
+    remix-auth: "npm:^3.2.2"
+    remix-auth-oauth2: "npm:^1.2.2"
+  peerDependencies:
+    "@remix-run/server-runtime": ^1 || ^2
+  checksum: 10c0/72a13fda1f3297e273c16e50360f3b22df6b601724d5ffe1d298df6d4cdff8a173d96155de2ef15eee73527644e2df5592d0172a97396569ea43386c8365a357
   languageName: node
   linkType: hard
 
@@ -12153,6 +12202,33 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10c0/02ba649de1b7ca8854bfe20a82f1dfbdda3fb57a22ab4a8972a63a34553cf7aa51bc9081cf7e001b035b88186d23689d69e71b510e610a09a4c66f68aa95b672
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
   languageName: node
   linkType: hard
 

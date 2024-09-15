@@ -11,6 +11,7 @@ import {I18nextProvider, initReactI18next} from 'react-i18next';
 import Backend from 'i18next-fs-backend';
 import i18n from '~/i18n';
 import {resolve} from 'node:path';
+import dotenv from 'dotenv';
 
 const ABORT_DELAY = 5_000;
 
@@ -21,6 +22,7 @@ export default async function handleRequest(
     remixContext: EntryContext,
     loadContext: AppLoadContext
 ) {
+    dotenv.config();
     let prohibitOutOfOrderStreaming =
         isBotRequest(request.headers.get("user-agent")) || remixContext.isSpaMode;
 
