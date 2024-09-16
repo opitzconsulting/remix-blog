@@ -26,9 +26,6 @@ export async function requireUserSession(request: Request) {
   // get the session
   const cookie = request.headers.get('cookie')
   const session = await getSession(cookie)
-  if (session.get('targetURL')) {
-    throw redirect(session.get('targetURL'), { headers: { 'Set-Cookie': await commitSession(session) } })
-  }
   // validate the session, `userId` is just an example, use whatever value you
   // put in the session when the user authenticated
   if (!session.has(authenticator.sessionKey)) {

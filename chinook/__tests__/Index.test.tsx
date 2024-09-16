@@ -15,7 +15,7 @@ describe("Home Page", () => {
 		},
 	]);
 	render(<RemixStub />);
-	it("should render the Albums link", async () => {
-		await waitFor(() => screen.getByText("Albums"));
+	it("should render Welcome to Remix", async () => {
+		await waitFor(() => screen.getByText("Welcome to Remix"));
 	});
 });
