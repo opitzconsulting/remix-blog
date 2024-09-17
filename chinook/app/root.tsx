@@ -89,14 +89,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 						</AppShell.Header>
 
 						<AppShell.Navbar p={"md"}>
-							<List>
-								<List.Item>
-									<Link to={"/about"}>About</Link>
-								</List.Item>
-								<List.Item>
-									<Link to={"/employees"}>Employees</Link>
-								</List.Item>
-							</List>
 						</AppShell.Navbar>
 						<AppShell.Main>{children}</AppShell.Main>
 					</AppShell>
