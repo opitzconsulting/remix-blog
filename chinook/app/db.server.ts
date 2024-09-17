@@ -8,7 +8,7 @@ const { Pool } = pg;
 
 const pool = new Pool({
 	connectionString:
-		"postgres://chinook_admin:chinook_admin@127.0.0.1:5432/chinook",
+		process.env.DATABASE_URL,
 });
 
 export const db = drizzle(pool, { schema });
