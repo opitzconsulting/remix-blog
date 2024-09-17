@@ -12,6 +12,9 @@ services:
     volumes:
       - "./docker-compose/postgres/initdb.d:/docker-entrypoint-initdb.d:Z"
       - postgres-data:/var/lib/postgresql/data
+    profiles:
+      - default
+      - authn
   keycloak:
     image: keycloak/keycloak:25.0.4
     command:
