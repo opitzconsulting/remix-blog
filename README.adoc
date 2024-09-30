@@ -11,9 +11,27 @@ This repository contains the source code for the blog post {blog}["Remix—Ein l
 * Node.js (>= 20)
 * yarn
 
+
+== Preparing .env
+
+Before doing anyting else use the env.sample to seed your .env
+
+[source,bash]
+----
+cp env.sample .env
+----
+
+And link to the .env from the chinook directory (or copy .env there as well)
+
+[source,bash]
+----
+cd chinook
+ln -s ../.env .env
+----
+
 == Getting Started development
 
-After cloning the project, start the postgres container using docker in the root directory of the project.
+Now start the postgres container using docker in the root directory of the project.
 
 [source, bash]
 ----
